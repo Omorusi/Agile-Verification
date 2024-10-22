@@ -27,7 +27,7 @@ public class Period {
             return endHour;
         }
 
-        public int duration(){
+        public int getDuration(){
         return endHour - startHour;
         }
 }
