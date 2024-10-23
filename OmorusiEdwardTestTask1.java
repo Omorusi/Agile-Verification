@@ -70,6 +70,8 @@ public class OmorusiEdwardTestTask1 {
         });
 
     }
+
+    // test case 9
    @Test
 public  void testendHourNegative() {
    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->  {
@@ -77,36 +79,72 @@ public  void testendHourNegative() {
 });
 }
     // Test Case 10: Invalid input, startHour is a non-numeric string
-    @Test
-    public void testStartHourNonNumeric() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            new Period("abc", 4);  // Should throw IllegalArgumentException
-        });
-        assertEquals("Invalid hour values", thrown.getMessage());
-    }
-    // Test Case 11: Invalid input, startHour is a non-numeric string
-    @Test
-    public void testEndHourNonNumeric() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            new Period(4, "xvy");  // Should throw IllegalArgumentException
-        });
-        assertEquals("Invalid hour values", thrown.getMessage());
-    }
-    // Test Case 12: Invalid input, startHour is a non-numeric string
-    @Test
-    public void testStartHourAndEndHourNonNumeric() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            new Period("abc", "xvy");  // Should throw IllegalArgumentException
-        });
-        assertEquals("Invalid hour values", thrown.getMessage());
-    }
-    // Test Case 13: Invalid input, startHour is a non-numeric string
+
 @Test
     public void testValidStartandendHour() {
    Period p =  new Period(0, 24);
     assertNotNull(p);
 
 }
+
+    // Test Case 11: Invalid startHour (startHour == 25)
+    @Test
+    public void testInvalidStartHourExceedsTwentyFour() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            Period period =  new Period(25, 6);  // Invalid startHour (greater than 24)
+        });
+
+    }
+
+    // Test Case 12: Invalid endHour (endHour > 24)
+    @Test
+    public void testInvalidEndHourExceedsTwentyFour() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            Period period =    new Period(4, 25);  // Invalid endHour (greater than 24)
+        });
+
+    }
+
+    // Test Case 13: Valid input (startHour == 23, endHour == 24)
+    @Test
+    public void testValidPeriodTwentyThreeToTwentyFour() {
+        Period period = new Period(23, 24);  // Valid case
+        assertNotNull(period);  // Ensure the object is created successfully
+    }
+
+    // Test Case 14: Invalid startHour (-1)
+    @Test
+    public void testInvalidNegativeStartHour() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            Period period =   new Period(-1, 22);  // Invalid startHour
+        });
+    }
+
+    // Test Case 15: Invalid startHour == 24
+    @Test
+    public void testInvalidStartHourEqualTwentyFour() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            Period period =  new Period(24, 5);  // Invalid startHour == 24
+        });
+
+    }
+
+    // Test Case 16: Invalid period (startHour > endHour)
+    @Test
+    public void testInvalidStartGreaterThanEnd() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            Period period =  new Period(22, 20);  // Invalid period
+        });
+
+    }
+
+    // Test Case 17: Valid period (startHour == 0, endHour == 1)
+    @Test
+    public void testValidSmallDuration() {
+        Period period = new Period(0, 1);  // Valid period
+        assertNotNull(period);  // Ensure the object is created successfully
+    }
+
 
  // Testing duration Method
  @Test
@@ -142,4 +180,70 @@ public  void testendHourNegative() {
         Period period = new Period(4, 5);
         assertEquals(1, period.getDuration());  // Duration = 5 - 4 = 1
     }
+
+      //  TESTING THE OVERLAPS METHOD
+      // Test Case 1: Periods completely overlap
+      @Test
+      public void testCompletelyOverlappingPeriods() {
+          Period period1 = new Period(3, 6);
+          Period period2 = new Period(4, 5);
+          assertTrue(period1.overlaps(period2));
+      }
+
+    // Test Case 2: Periods partially overlap
+    @Test
+    public void testPartiallyOverlappingPeriods() {
+        Period period1 = new Period(2, 5);
+        Period period2 = new Period(4, 7);
+        assertTrue(period1.overlaps(period2));
+    }
+
+    // Test Case 3: Periods are consecutive (no overlap)
+    @Test
+    public void testConsecutivePeriods() {
+        Period period1 = new Period(3, 5);
+        Period period2 = new Period(5, 7);
+        assertFalse(period1.overlaps(period2));
+    }
+
+    // Test Case 4: Periods do not overlap at all
+    @Test
+    public void testNonOverlappingPeriods() {
+        Period period1 = new Period(1, 3);
+        Period period2 = new Period(4, 6);
+        assertFalse(period1.overlaps(period2));
+    }
+
+    // Test Case 5: One period is fully within another
+    @Test
+    public void testFullyWithinAnotherPeriod() {
+        Period period1 = new Period(2, 8);
+        Period period2 = new Period(3, 5);
+        assertTrue(period1.overlaps(period2));
+    }
+
+    // Test Case 6: Same start hour, different end hour
+    @Test
+    public void testSameStartDifferentEnd() {
+        Period period1 = new Period(5, 9);
+        Period period2 = new Period(5, 7);
+        assertTrue(period1.overlaps(period2));
+    }
+
+    // Test Case 7: Periods are identical
+    @Test
+    public void testIdenticalPeriods() {
+        Period period1 = new Period(3, 6);
+        Period period2 = new Period(3, 6);
+        assertTrue(period1.overlaps(period2));
+    }
+
+    // Test Case 8: Boundary overlap (touching exactly at one end)
+    @Test
+    public void testBoundaryOverlap() {
+        Period period1 = new Period(3, 5);
+        Period period2 = new Period(5, 7);
+        assertFalse(period1.overlaps(period2));
+    }
 }
+

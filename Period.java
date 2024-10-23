@@ -30,4 +30,9 @@ public class Period {
         public int getDuration(){
         return endHour - startHour;
         }
+
+    public boolean overlaps(Period other) {
+
+        return this.startHour < other.endHour && other.startHour < this.endHour;
+    }
 }
