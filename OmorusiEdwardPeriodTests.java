@@ -2,8 +2,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class OmorusiEdwardTestTask1 {
-//  Testing the Period constructor
+public class OmorusiEdwardPeriodTests {
+    //  Testing the Period constructor
     @Test
     public void testStartHourNegative() {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
@@ -72,20 +72,20 @@ public class OmorusiEdwardTestTask1 {
     }
 
     // test case 9
-   @Test
-public  void testendHourNegative() {
-   IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->  {
-   new Period(7,-8);   // Should throw IllegalArgumentException because of a negative input in endHour
-});
-}
+    @Test
+    public  void testendHourNegative() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->  {
+            new Period(7,-8);   // Should throw IllegalArgumentException because of a negative input in endHour
+        });
+    }
     // Test Case 10: Invalid input, startHour is a non-numeric string
 
-@Test
+    @Test
     public void testValidStartandendHour() {
-   Period p =  new Period(0, 24);
-    assertNotNull(p);
+        Period p =  new Period(0, 24);
+        assertNotNull(p);
 
-}
+    }
 
     // Test Case 11: Invalid startHour (startHour == 25)
     @Test
@@ -146,12 +146,12 @@ public  void testendHourNegative() {
     }
 
 
- // Testing duration Method
- @Test
- public void testValidDuration() {
-     Period period = new Period(4, 7);
-     assertEquals(3, period.getDuration());  // Duration = 7 - 4 = 3
- }
+    // Testing duration Method
+    @Test
+    public void testValidDuration() {
+        Period period = new Period(4, 7);
+        assertEquals(3, period.getDuration());  // Duration = 7 - 4 = 3
+    }
 
     // Test Case 4: StartHour = 0 and endHour = 5
     @Test
@@ -181,14 +181,14 @@ public  void testendHourNegative() {
         assertEquals(1, period.getDuration());  // Duration = 5 - 4 = 1
     }
 
-      //  TESTING THE OVERLAPS METHOD
-      // Test Case 1: Periods completely overlap
-      @Test
-      public void testCompletelyOverlappingPeriods() {
-          Period period1 = new Period(3, 6);
-          Period period2 = new Period(4, 5);
-          assertTrue(period1.overlaps(period2));
-      }
+    //  TESTING THE OVERLAPS METHOD
+    // Test Case 1: Periods completely overlap
+    @Test
+    public void testCompletelyOverlappingPeriods() {
+        Period period1 = new Period(3, 6);
+        Period period2 = new Period(4, 5);
+        assertTrue(period1.overlaps(period2));
+    }
 
     // Test Case 2: Periods partially overlap
     @Test
@@ -246,4 +246,3 @@ public  void testendHourNegative() {
         assertFalse(period1.overlaps(period2));
     }
 }
-
