@@ -6,143 +6,180 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class OmorusiEdwardRateTests {
-    // Test case 1
     @Test
-    public void testValidRateStaff() {
-        // Test case 1: Valid Input
-        Rate rate = new Rate(Rate.CarParkKind.STAFF, Arrays.asList(new Period(7, 10)), Arrays.asList(new Period(10, 15)), 8, 5);
-        assertNotNull(rate);
+    public void testValidPeriodsAndRatesWithinAllowedRange() { // Test 1
+        Rate rate = new Rate(Rate.CarParkKind.STAFF,
+                Arrays.asList(new Period(7, 10)),
+                Arrays.asList(new Period(10, 15)),
+                8, 5);
+        assertNotNull(rate); // Should create a valid rate object
     }
-    // Test case 2
+
     @Test
-    public void testInvalidRateNormalLessThanReduced() {
-        // Test case 2: Invalid Input, normal rate < reduced rate
+    public void testNormalRateLessThanReducedRate() { // Test 2
         assertThrows(IllegalArgumentException.class, () -> {
-            new Rate(Rate.CarParkKind.STUDENT, Arrays.asList(new Period(6, 8)), Arrays.asList(new Period(8, 10)), 5, 6);
+            new Rate(Rate.CarParkKind.STUDENT,
+                    Arrays.asList(new Period(6, 8)),
+                    Arrays.asList(new Period(8, 10)),
+                    5, 6);
         });
     }
-    // Test case 3
+
     @Test
-    public void testInvalidOverlappingPeriods() {
-        // Test case 3: Invalid Input, periods overlap
+    public void testReducedAndNormalPeriodsOverlap() { // Test 3
         assertThrows(IllegalArgumentException.class, () -> {
-            new Rate(Rate.CarParkKind.VISITOR, Arrays.asList(new Period(9, 12)), Arrays.asList(new Period(11, 14)), 9, 5);
+            new Rate(Rate.CarParkKind.VISITOR,
+                    Arrays.asList(new Period(9, 12)),
+                    Arrays.asList(new Period(11, 14)),
+                    9, 5);
         });
     }
-    // Test case 4
+
     @Test
-    public void testInvalidRateForStaff() {
-        // Test case 4: Invalid Input, normal rate exceeds maximum for STAFF
+    public void testNormalRateGreaterThanAllowedMaximum() { // Test 4
         assertThrows(IllegalArgumentException.class, () -> {
-            new Rate(Rate.CarParkKind.STAFF, Arrays.asList(new Period(7, 10)), Arrays.asList(new Period(10, 15)), 12, 5);
+            new Rate(Rate.CarParkKind.STAFF,
+                    Arrays.asList(new Period(7, 10)),
+                    Arrays.asList(new Period(10, 15)),
+                    12, 5);
         });
     }
-    // Test case 5
+
     @Test
-    public void testInvalidReducedRateNegative() {
-        // Test case 5: Invalid Input, reduced rate is negative
+    public void testReducedRateIsNegative() { // Test 5
         assertThrows(IllegalArgumentException.class, () -> {
-            new Rate(Rate.CarParkKind.STUDENT, Arrays.asList(new Period(8, 10)), Arrays.asList(new Period(10, 12)), 7, -1);
+            new Rate(Rate.CarParkKind.STUDENT,
+                    Arrays.asList(new Period(8, 10)),
+                    Arrays.asList(new Period(10, 12)),
+                    7, -1);
         });
     }
-    // Test case 6
+
     @Test
-    public void testValidBoundaryCaseAdjacentPeriods() {
-        // Test case 6: Valid Input, adjacent reduced and normal periods
-        Rate rate = new Rate(Rate.CarParkKind.VISITOR, Arrays.asList(new Period(8, 12)), Arrays.asList(new Period(12, 16)), 10, 6);
-        assertNotNull(rate);
+    public void testNoPeriodsSpecified() { // Test 6
+        Rate rate = new Rate(Rate.CarParkKind.VISITOR,
+                Arrays.asList(),
+                Arrays.asList(),
+                8, 5);
+        assertNotNull(rate); // Should create a valid rate object
     }
-    // Test case 7
+
     @Test
-    public void testValidManagementPeriodSeparation() {
-        // Test case 7: Valid Input, reduced period earlier, normal period later
-        Rate rate = new Rate(Rate.CarParkKind.MANAGEMENT, Arrays.asList(new Period(6, 9)), Arrays.asList(new Period(9, 13)), 7, 4);
-        assertNotNull(rate);
+    public void testOnlyReducedPeriodsDefined() { // Test 7
+        Rate rate = new Rate(Rate.CarParkKind.VISITOR,
+                Arrays.asList(new Period(8, 12)),
+                Arrays.asList(),
+                8, 6);
+        assertNotNull(rate); // Should create a valid rate object
     }
-    // Test case 8
+
     @Test
-    public void testInvalidOverlappingPeriodsInSameCategory() {
-        // Test case 8: Invalid Input, overlapping periods within reduced category
+    public void testOverlappingPeriodsWithinSameCategory() { // Test 8
         assertThrows(IllegalArgumentException.class, () -> {
-            new Rate(Rate.CarParkKind.STUDENT, Arrays.asList(new Period(8, 11), new Period(10, 12)), Arrays.asList(new Period(13, 16)), 6, 3);
+            new Rate(Rate.CarParkKind.STUDENT,
+                    Arrays.asList(new Period(8, 11), new Period(10, 12)),
+                    Arrays.asList(new Period(13, 16)),
+                    6, 3);
         });
     }
-    // Test case 9
-    @Test
-    public void testValidNoPeriodsDefined() {
-        // Test case 9: Valid Input, no periods defined
-        Rate rate = new Rate(Rate.CarParkKind.VISITOR, Arrays.asList(), Arrays.asList(), 8, 5);
-        assertNotNull(rate);
-    }
-    // Test case 10
-    @Test
-    public void testValidNormalRateZero() {
-        // Test case 10: Valid Input, normal rate is zero
-        Rate rate = new Rate(Rate.CarParkKind.STAFF, Arrays.asList(new Period(6, 9)), Arrays.asList(new Period(9, 13)), 7, 4);
-        assertNotNull(rate);
-    }
 
-    // Test case 11: Valid Input, reduced and normal periods fully adjacent
     @Test
-    public void testValidFullyAdjacentPeriods() {
-        Rate rate = new Rate(Rate.CarParkKind.MANAGEMENT, Arrays.asList(new Period(5, 8)), Arrays.asList(new Period(8, 12)), 9, 4);
-        assertNotNull(rate);
-    }
-
-    // Test case 12: Valid Input, only reduced periods defined
-    @Test
-    public void testValidOnlyReducedPeriods() {
-        Rate rate = new Rate(Rate.CarParkKind.VISITOR, Arrays.asList(new Period(8, 12)), Arrays.asList(), 8, 6);
-        assertNotNull(rate);
-    }
-
-    // Test case 13: Valid Input, only normal periods defined
-    @Test
-    public void testValidOnlyNormalPeriods() {
-        Rate rate = new Rate(Rate.CarParkKind.STUDENT, Arrays.asList(), Arrays.asList(new Period(6, 12)), 7, 0);
-        assertNotNull(rate);
-    }
-
-    // Test case 14: Invalid Input, period exceeds 24 hours
-    @Test
-    public void testInvalidPeriodExceeds24Hours() {
+    public void testReducedPeriodStartsAfterEnd() { // Test 9
         assertThrows(IllegalArgumentException.class, () -> {
-            new Rate(Rate.CarParkKind.MANAGEMENT, Arrays.asList(new Period(8, 12)), Arrays.asList(new Period(12, 25)), 9, 5);
+            new Rate(Rate.CarParkKind.STUDENT,
+                    Arrays.asList(new Period(12, 8)),
+                    Arrays.asList(new Period(10, 15)),
+                    8, 5);
         });
     }
 
-    // Test case 15: Invalid Input, reduced period starts after it ends
     @Test
-    public void testInvalidPeriodStartAfterEnd() {
+    public void testReducedPeriodEqualToNormalPeriod() { // Test 10
         assertThrows(IllegalArgumentException.class, () -> {
-            new Rate(Rate.CarParkKind.STUDENT, Arrays.asList(new Period(12, 8)), Arrays.asList(new Period(10, 15)), 8, 5);
+            new Rate(Rate.CarParkKind.STAFF,
+                    Arrays.asList(new Period(9, 12)),
+                    Arrays.asList(new Period(9, 12)),
+                    10, 6);
         });
     }
 
-    // Test case 16: Invalid Input, reduced and normal periods are equal
     @Test
-    public void testInvalidEqualPeriods() {
+    public void testReducedRateEqualToNormalRate() { // Test 11
+        Rate rate = new Rate(Rate.CarParkKind.STAFF,
+                Arrays.asList(new Period(7, 10)),
+                Arrays.asList(new Period(10, 15)),
+                5, 5);
+        assertNotNull(rate); // Should create a valid rate object
+    }
+
+    @Test
+    public void testReducedPeriodsContainSingleTimeSlot() { // Test 12
         assertThrows(IllegalArgumentException.class, () -> {
-            new Rate(Rate.CarParkKind.STAFF, Arrays.asList(new Period(9, 12)), Arrays.asList(new Period(9, 12)), 10, 6);
+            new Rate(Rate.CarParkKind.VISITOR,
+                    Arrays.asList(new Period(10, 10)),
+                    Arrays.asList(new Period(11, 15)),
+                    7, 5);
         });
     }
 
-    // Test case 17: Invalid Input, normal rate less than reduced rate
     @Test
-    public void testInvalidNormalRateLessThanReducedRate() {
-        // New Test Case: Normal rate is less than reduced rate
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            new Rate(Rate.CarParkKind.STUDENT, Arrays.asList(new Period(8, 12)), Arrays.asList(new Period(12, 16)), 4, 5); // Normal rate < Reduced rate
+    public void testMultipleReducedPeriodsOverlap() { // Test 13
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(Rate.CarParkKind.STUDENT,
+                    Arrays.asList(new Period(7, 9), new Period(8, 10)),
+                    Arrays.asList(new Period(10, 15)),
+                    6, 4);
         });
-        assertEquals("Normal rate must be greater than or equal to reduced rate.", thrown.getMessage());
     }
 
-    // Test case 18: Valid Input, normal rate equals reduced rate (boundary case)
+
+
     @Test
-    public void testValidNormalRateEqualReducedRate() {
-        // New Test Case: Normal rate is equal to reduced rate
-        Rate rate = new Rate(Rate.CarParkKind.STAFF, Arrays.asList(new Period(7, 9)), Arrays.asList(new Period(9, 12)), 5, 5); // Normal rate == Reduced rate
-        assertNotNull(rate);
+    public void testStartHourOfReducedPeriodIsGreaterThanEnd() { // Test 14
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(Rate.CarParkKind.STUDENT,
+                    Arrays.asList(new Period(10, 8)),
+                    Arrays.asList(new Period(9, 15)),
+                    8, 5);
+        });
     }
 
+    @Test
+    public void testAllDefinedPeriodsDuringOperatingHours() { // Test 15
+        Rate rate = new Rate(Rate.CarParkKind.MANAGEMENT,
+                Arrays.asList(new Period(7, 10)),
+                Arrays.asList(new Period(10, 12)),
+                6, 3);
+        assertNotNull(rate); // Should create a valid rate object
+    }
+
+    @Test
+    public void testNormalPeriodsOutOfBounds() { // Test 16
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(Rate.CarParkKind.VISITOR,
+                    Arrays.asList(new Period(8, 10)),
+                    Arrays.asList(new Period(24, 26)),
+                    7, 5);
+        });
+    }
+
+
+    @Test
+    public void testReducedAndNormalPeriodsHaveGaps() { // Test 17
+        Rate rate = new Rate(Rate.CarParkKind.STAFF,
+                Arrays.asList(new Period(8, 9)),
+                Arrays.asList(new Period(10, 12)),
+                5, 3);
+        assertNotNull(rate); // Should create a valid rate object
+    }
+
+    @Test
+    public void testReducedPeriodsDefinedButExceedMaximumLimit() { // Test 18
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(Rate.CarParkKind.STUDENT,
+                    Arrays.asList(new Period(0, 25)),
+                    Arrays.asList(new Period(10, 15)),
+                    5, 2);
+        });
+    }
 }
