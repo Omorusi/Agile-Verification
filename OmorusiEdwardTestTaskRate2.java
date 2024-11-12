@@ -88,7 +88,8 @@ public class OmorusiEdwardTestTaskRate2 {
         });
     }
 
-    @Test // Test Case 11 ( should be able to calculate the rate as the specifications says that normal  can be greater  or equal to reduce rate )
+    @Test
+    // Test Case 11 ( should be able to calculate the rate as the specifications says that normal  can be greater  or equal to reduce rate )
     public void testReducedRateEqualToNormalRate() {
         Rate rate = new Rate(CarParkKind.STAFF, new ArrayList<>(List.of(new Period(7, 10))),
                 new ArrayList<>(List.of(new Period(10, 15))), new BigDecimal("5"), new BigDecimal("5"));
@@ -149,8 +150,38 @@ public class OmorusiEdwardTestTaskRate2 {
         });
     }
 
-    //Testing calculate method
+    @Test
+    public void testNullRates() {
+        // Create sample periods for testing
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(8, 10));
 
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(10, 15));
+
+        // Test Case 1: Normal rate is null, reduced rate is valid
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(CarParkKind.STAFF, reducedPeriods, normalPeriods, null,null);
+        });
+        assertEquals("The rates cannot be null", exception.getMessage());
+    }
+    @Test
+    public void testReducedPeriodsAreNull() {
+
+        // Test for null reducedPeriods
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(10, 15));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(CarParkKind.STAFF, null, normalPeriods, new BigDecimal("10"), new BigDecimal("5"));
+        });
+        assertEquals("periods cannot be null", exception.getMessage());
+    }
+
+
+
+
+    //Testing calculate method
 
     @Test
     public void testCalculateChargeForBothPeriods() {
@@ -241,18 +272,18 @@ public class OmorusiEdwardTestTaskRate2 {
 
 
     }
-
-    //@Test
-    //public void testOnlyReducedPeriodsDefined() {
+    {/*}
+    @Test
+    public void testOnlyReducedPeriodsDefined() {
         // Test Case 8
-      // ArrayList<Period> reducedPeriods = new ArrayList<>();
-       // reducedPeriods.add(new Period(8, 12));
-       // ArrayList<Period> normalPeriods = new ArrayList<>();
-       // Rate rate = new Rate(CarParkKind.STUDENT, reducedPeriods, normalPeriods, new BigDecimal("7"), new BigDecimal("5"));
-       // BigDecimal total = rate.calculate(new Period(8, 12)); // Only reduced periods
-       // assertEquals(new BigDecimal("20"), total); // 4 hours at reduced rate
-    //}
-
+      ArrayList<Period> reducedPeriods = new ArrayList<>();
+       reducedPeriods.add(new Period(8, 12));
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+       Rate rate = new Rate(CarParkKind.STUDENT, reducedPeriods, normalPeriods, new BigDecimal("7"), new BigDecimal("5"));
+       BigDecimal total = rate.calculate(new Period(8, 12)); // Only reduced periods
+       assertEquals(new BigDecimal("20"), total); // 4 hours at reduced rate
+    }
+*/}
     @Test
     public void testChargeWithMaxNormalRate() {
         // Test Case 9
@@ -388,5 +419,7 @@ normalPeriods.add(new Period(7, 8));
         });
 
     }
+
+
 }
 
