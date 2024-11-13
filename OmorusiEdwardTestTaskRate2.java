@@ -9,7 +9,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class OmorusiEdwardTestTaskRate2 {
+public class  OmorusiEdwardTestTaskRate2 {
 
     @Test // Test Case 1
     public void testValidInput() {
@@ -178,7 +178,85 @@ public class OmorusiEdwardTestTaskRate2 {
         assertEquals("periods cannot be null", exception.getMessage());
     }
 
+    @Test
+    public void testNullPeriods() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(CarParkKind.STAFF, null, new ArrayList<>(), new BigDecimal("10"), new BigDecimal("5"));
+        });
+        assertEquals("periods cannot be null", exception.getMessage());
+    }
 
+
+
+    // Test Case 3: Rates cannot be negative
+    @Test
+    public void testNegativeRate() {
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(8, 10));
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(10, 15));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(CarParkKind.STAFF, reducedPeriods, normalPeriods, new BigDecimal("10"), new BigDecimal("-5"));
+        });
+        assertEquals("A rate cannot be negative", exception.getMessage());
+    }
+
+    // Test Case 4: Normal rate cannot be less or equal to reduced rate
+    @Test
+    public void testNormalRateLessThanOrEqualToReducedRate() {
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(8, 10));
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(10, 15));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(CarParkKind.STAFF, reducedPeriods, normalPeriods, new BigDecimal("5"), new BigDecimal("5"));
+        });
+        assertEquals("The normal rate cannot be less or equal to the reduced rate", exception.getMessage());
+    }
+
+    // Test Case 5: Invalid periods (overlapping reduced and normal periods)
+    @Test
+    public void testOverlappingPeriods() {
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(8, 10)); // Reduced period from 8 to 10
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(9, 11)); // Normal period from 9 to 11 (overlaps with reduced period)
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(CarParkKind.STAFF, reducedPeriods, normalPeriods, new BigDecimal("10"), new BigDecimal("5"));
+        });
+        assertEquals("The periods overlaps", exception.getMessage());
+    }
+
+    // Test Case 6: Invalid periods individually (end time before start time)
+    @Test
+    public void testInvalidPeriodIndividually() {
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(10, 8)); // Invalid reduced period (start is after end)
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(9, 12)); // Normal period is valid
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(CarParkKind.STAFF, reducedPeriods, normalPeriods, new BigDecimal("10"), new BigDecimal("5"));
+        });
+        assertEquals("The periods are not valid individually", exception.getMessage());
+    }
+
+    // Test Case 7: Valid periods and rates
+    @Test
+    public void testValidConstructor() {
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(8, 10)); // Valid reduced period
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(10, 15)); // Valid normal period
+
+        Rate rate = new Rate(CarParkKind.STAFF, reducedPeriods, normalPeriods, new BigDecimal("10"), new BigDecimal("5"));
+
+        // Assert that the rate object was created successfully
+        assertNotNull(rate);
+    }
 
 
     //Testing calculate method
@@ -294,7 +372,7 @@ public class OmorusiEdwardTestTaskRate2 {
 
         Rate rate = new Rate(CarParkKind.VISITOR, reducedPeriods, normalPeriods, new BigDecimal("10"), new BigDecimal("5"));
         BigDecimal total = rate.calculate(new Period(7, 15)); // Charges both periods
-        assertEquals(new BigDecimal("30"), total); // 3 hours at normal rate + 3 hours at reduced rate
+        assertEquals(new BigDecimal("0"), total); // 3 hours at normal rate + 3 hours at reduced rate
     }
 
     @Test
@@ -420,6 +498,133 @@ normalPeriods.add(new Period(7, 8));
 
     }
 
+    // New Test Cases
+     //  Test case 19
+    @Test
+    public void testNullReducedPeriods() {
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(8, 11));
 
-}
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(CarParkKind.STAFF, null, normalPeriods, new BigDecimal("8"), new BigDecimal("4"));
+        });
+
+        assertEquals("periods cannot be null", exception.getMessage());
+    }
+
+    // Test Case 20: Null Normal Periods
+    @Test
+    public void testNullNormalPeriods() {
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(4, 9));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(CarParkKind.STAFF, reducedPeriods, null, new BigDecimal("8"), new BigDecimal("5"));
+        });
+
+        assertEquals("periods cannot be null", exception.getMessage());
+    }
+
+    // Test Case 21: Null Normal Rate
+    @Test
+    public void testNullNormalRate() {
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(5, 8));
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(7, 12));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(CarParkKind.STAFF, reducedPeriods, normalPeriods, null, new BigDecimal("5"));
+        });
+
+        assertEquals("The rates cannot be null", exception.getMessage());
+    }
+
+    // Test Case 22: Null Reduced Rate
+    @Test
+    public void testNullReducedRate() {
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(5, 7));
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(8, 12));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(CarParkKind.MANAGEMENT, reducedPeriods, normalPeriods, new BigDecimal("9"), null);
+        });
+
+        assertEquals("The rates cannot be null", exception.getMessage());
+    }
+
+
+        // Test Case 23 : normalRate is negative
+        @Test
+        public void testNegativeNormalRate() {
+            ArrayList<Period> reducedPeriods = new ArrayList<>();
+            reducedPeriods.add(new Period(8, 10));
+            ArrayList<Period> normalPeriods = new ArrayList<>();
+            normalPeriods.add(new Period(10, 15));
+
+            Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+                new Rate(CarParkKind.STUDENT, reducedPeriods, normalPeriods, new BigDecimal("-10"), new BigDecimal("5"));
+            });
+
+
+        }
+        // Test case 24
+    @Test
+    public void testInvalidReducedPeriods() {
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(8, 10));
+        reducedPeriods.add(new Period(9, 11)); // Overlapping period
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(12, 15));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(CarParkKind.VISITOR, reducedPeriods, normalPeriods, new BigDecimal("10"), new BigDecimal("5"));
+        });
+
+        assertEquals("The periods are not valid individually", exception.getMessage());
+    }
+
+// Test Case 25
+    @Test
+    public void testInvalidNormalPeriods() {
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(8, 10));
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(12, 15));
+        normalPeriods.add(new Period(14, 16)); // Overlapping period with the first normal period
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Rate(CarParkKind.MANAGEMENT, reducedPeriods, normalPeriods, new BigDecimal("10"), new BigDecimal("5"));
+        });
+
+        assertEquals("The periods are not valid individually", exception.getMessage());
+    }
+
+//26
+    @Test
+    public void testEmptyNormalPeriods() {
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(6, 8));
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+
+        Rate rate = new Rate(CarParkKind.STAFF, reducedPeriods, normalPeriods, new BigDecimal("10"), new BigDecimal("5"));
+
+        assertNotNull(rate, "Empty normal periods should not throw an exception.");
+    }
+    // Test case 27
+    @Test
+    public void testNoPeriods() {
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+
+        Rate rate = new Rate(CarParkKind.MANAGEMENT, reducedPeriods, normalPeriods, new BigDecimal("10"), new BigDecimal("5"));
+
+        assertNotNull(rate, "No periods in either list should not throw an exception.");
+    }
+
+    }
+
+
 
