@@ -245,4 +245,6 @@ public void testStartHourNegative() {
         Period period2 = new Period(5, 7);
         assertFalse(period1.overlaps(period2));
     }
+
+
 }
