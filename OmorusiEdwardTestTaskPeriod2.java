@@ -1,4 +1,5 @@
 package cm;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class OmorusiEdwardTestTaskPeriod2 {  @Test

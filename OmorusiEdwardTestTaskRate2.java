@@ -1,5 +1,6 @@
 package cm;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -501,7 +502,20 @@ normalPeriods.add(new Period(7, 8));
         });
 
     }
+  
 
+    @Test
+    public void testMinAllowedCostWhenBelowThreshold() {
+        // Test Case 17
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(6, 8)); // Reduced period from 6 to 8 hours
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(8, 10)); // Normal period from 8 to 10 hours
+
+        Rate rate = new Rate(CarParkKind.MANAGEMENT, reducedPeriods, normalPeriods, new BigDecimal("1"), new BigDecimal("1"));
+        BigDecimal total = rate.calculate(new Period(6, 7)); // Covers only the reduced period, 1 hour at reduced rate
+        Assertions.assertEquals(new BigDecimal("4"), total); // Since the total cost is below the minimum, it should return 4.00
+    }
     }
 
 
