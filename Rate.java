@@ -33,80 +33,76 @@ public class Rate {
         this.reduced = reducedPeriods;
         this.normal = normalPeriods;
 
-        // Assign strategy based on the car park kind using if-else
-        if (this.kind == CarParkKind.VISITOR) {
-            this.strategy = new VisitorStrategy();
-        } else if (this.kind == CarParkKind.MANAGEMENT) {
-            this.strategy = new ManagementStrategy();
-        } else if (this.kind == CarParkKind.STUDENT) {
-            this.strategy = new StudentStrategy();
-        } else if (this.kind == CarParkKind.STAFF) {
-            this.strategy = new StaffStrategy();
-        } else {
-            throw new IllegalArgumentException("Unknown CarParkKind: " + kind);
-        }
+        // Assign strategy based on the car park kind using a switch statement
+        this.strategy = switch (this.kind) {
+            case VISITOR -> new VisitorStrategy();
+            case MANAGEMENT -> new ManagementStrategy();
+            case STUDENT -> new StudentStrategy();
+            case STAFF -> new StaffStrategy();
+            default -> throw new IllegalArgumentException("Unknown CarParkKind: " + kind);
+        };
     }
 
-
-
-
-/**
-         * Checks if two collections of periods are valid together
-         * @param periods1
-         * @param periods2
-         * @return true if the two collections of periods are valid together
-         */
-        private boolean isValidPeriods(ArrayList<Period> periods1, ArrayList<Period> periods2) {
-            Boolean isValid = true;
-            int i = 0;
-            while (i < periods1.size() && isValid) {
-                isValid = isValidPeriod(periods1.get(i), periods2);
-                i++;
-            }
-            return isValid;
+    /**
+     * Checks if two collections of periods are valid together
+     *
+     * @param periods1
+     * @param periods2
+     * @return true if the two collections of periods are valid together
+     */
+    private boolean isValidPeriods(ArrayList<Period> periods1, ArrayList<Period> periods2) {
+        Boolean isValid = true;
+        int i = 0;
+        while (i < periods1.size() && isValid) {
+            isValid = isValidPeriod(periods1.get(i), periods2);
+            i++;
         }
-
-        /**
-         * checks if a collection of periods is valid
-         * @param list the collection of periods to check
-         * @return true if the periods do not overlap
-         */
-        private Boolean isValidPeriods(ArrayList<Period> list) {
-            Boolean isValid = true;
-            if (list.size() >= 2) {
-                Period secondPeriod;
-                int i = 0;
-                int lastIndex = list.size()-1;
-                while (i < lastIndex && isValid) {
-                    isValid = isValidPeriod(list.get(i), ((List<Period>)list).subList(i + 1, lastIndex+1));
-                    i++;
-                }
-            }
-            return isValid;
-        }
-
-        /**
-         * checks if a period is a valid addition to a collection of periods
-         * @param period the Period addition
-         * @param list the collection of periods to check
-         * @return true if the period does not overlap in the collecton of periods
-         */
-        private Boolean isValidPeriod(Period period, List<Period> list) {
-            Boolean isValid = true;
-            int i = 0;
-            while (i < list.size() && isValid) {
-                isValid = !period.overlaps(list.get(i));
-                i++;
-            }
-            return isValid;
-        }
-        public BigDecimal calculate(Period periodStay) {
-            int normalRateHours = periodStay.occurences(normal);
-            int reducedRateHours = periodStay.occurences(reduced);
-            if (this.kind==CarParkKind.VISITOR) return BigDecimal.valueOf(0);
-            return (this.hourlyNormalRate.multiply(BigDecimal.valueOf(normalRateHours))).add(
-                    this.hourlyReducedRate.multiply(BigDecimal.valueOf(reducedRateHours)));
-        }
-
+        return isValid;
     }
 
+    /**
+     * Checks if a collection of periods is valid
+     *
+     * @param list the collection of periods to check
+     * @return true if the periods do not overlap
+     */
+    private Boolean isValidPeriods(ArrayList<Period> list) {
+        Boolean isValid = true;
+        if (list.size() >= 2) {
+            int i = 0;
+            int lastIndex = list.size() - 1;
+            while (i < lastIndex && isValid) {
+                isValid = isValidPeriod(list.get(i), ((List<Period>) list).subList(i + 1, lastIndex + 1));
+                i++;
+            }
+        }
+        return isValid;
+    }
+
+    /**
+     * Checks if a period is a valid addition to a collection of periods
+     *
+     * @param period the Period addition
+     * @param list   the collection of periods to check
+     * @return true if the period does not overlap in the collection of periods
+     */
+    private Boolean isValidPeriod(Period period, List<Period> list) {
+        Boolean isValid = true;
+        int i = 0;
+        while (i < list.size() && isValid) {
+            isValid = !period.overlaps(list.get(i));
+            i++;
+        }
+        return isValid;
+    }
+
+    /**
+     * Calculates the total cost based on the period of stay and assigned strategy
+     *
+     * @param periodStay the period of stay
+     * @return the total cost as calculated by the strategy
+     */
+    public BigDecimal calculate(Period periodStay) {
+        return this.strategy.calculate(periodStay, hourlyNormalRate, hourlyReducedRate, normal, reduced);
+    }
+}

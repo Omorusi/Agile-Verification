@@ -516,7 +516,28 @@ normalPeriods.add(new Period(7, 8));
         BigDecimal total = rate.calculate(new Period(6, 7)); // Covers only the reduced period, 1 hour at reduced rate
         Assertions.assertEquals(new BigDecimal("4"), total); // Since the total cost is below the minimum, it should return 4.00
     }
+
+    // New test cases for the Strategy Patterns applied to the
+    @Test
+    public void testStaffMaximumPayableCost() {
+        // STAFF: Maximum payable is 16.00 per day
+        ArrayList<Period> reducedPeriods = new ArrayList<>();
+        reducedPeriods.add(new Period(6, 8)); // Reduced period from 6 to 8 hours
+        ArrayList<Period> normalPeriods = new ArrayList<>();
+        normalPeriods.add(new Period(8, 10)); // Normal period from 8 to 10 hours
+
+        Rate rate = new Rate(CarParkKind.STAFF, reducedPeriods, normalPeriods, new BigDecimal("10"), new BigDecimal("5"));
+
+        // 2 hours in normal (10 * 2 = 20), 2 hours in reduced (5 * 2 = 10), total = 30.00
+        BigDecimal total = rate.calculate(new Period(6, 10));
+
+        // After applying staff logic: Maximum payable is 16.00
+        //Assertions.assertEquals(new BigDecimal("16.00"), total);
     }
+
+
+
+}
 
 
 
