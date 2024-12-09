@@ -14,12 +14,16 @@ public class VisitorStrategy implements RateCalculationStrategy {
         BigDecimal reducedCost = reducedRate.multiply(BigDecimal.valueOf(reducedRateHours));
         BigDecimal totalCost = normalCost.add(reducedCost);
 
-        // Apply the 50% reduction for the visitor after the first 10.00
+        // Apply visitor discount logic: Free up to $10, then 50% on the remaining
         if (totalCost.compareTo(BigDecimal.valueOf(10)) > 0) {
-            totalCost = totalCost.subtract(BigDecimal.valueOf(10)).multiply(BigDecimal.valueOf(0.5)).add(BigDecimal.valueOf(10));
+            BigDecimal excess = totalCost.subtract(BigDecimal.valueOf(10)); // Calculate excess over $10
+            totalCost = excess.multiply(BigDecimal.valueOf(0.5)); // Apply 50% discount on excess
+        } else {
+            totalCost = BigDecimal.ZERO; // If total cost is $10 or less, it's free
         }
 
         return totalCost;
     }
+
 }
 

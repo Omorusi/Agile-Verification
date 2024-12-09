@@ -1,11 +1,10 @@
 package cm;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class OmorusiEdwardTestTaskPeriod2 {  @Test
 public void testStartHourNegative() {
-    IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+    IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
         new Period(-4, 6);  // Should throw IllegalArgumentException
     });
 
@@ -15,13 +14,13 @@ public void testStartHourNegative() {
     @Test
     public void testValidPeriod() {
         Period p = new Period(3, 5);  // Valid input
-        assertNotNull(p);
+        Assertions.assertNotNull(p);
     }
 
     // Test Case 3: Invalid input, start hour is blank
     @Test
     public void testStartHourBlank() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new Period(' ', 12);  // Should throw IllegalArgumentException
         });
 
@@ -30,7 +29,7 @@ public void testStartHourNegative() {
     // Test Case : 3 Invalid startHour and endHour
     @Test
     public void testValidPeriodBlank() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new Period(' ', ' ');   // Should throw IllegalArgumentException
         });
 
@@ -38,7 +37,7 @@ public void testStartHourNegative() {
 
     @Test
     public void testEndHourNegative() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new Period(4, -4);  // Should throw IllegalArgumentException
         });
 
@@ -47,7 +46,7 @@ public void testStartHourNegative() {
     // Test Case 6: Invalid input, startHour == endHour == 0
     @Test
     public void testStartAndEndHourZero() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new Period(0, 0);  // Should throw IllegalArgumentException
         });
 
@@ -56,7 +55,7 @@ public void testStartHourNegative() {
     // Test Case 7: Invalid input, startHour is greater than endHour
     @Test
     public void testStartHourGreaterThanEndHour() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new Period(6, 4);  // Should throw IllegalArgumentException
         });
 
@@ -64,7 +63,7 @@ public void testStartHourNegative() {
     // Test Case 8: Invalid input, startHour == endHour
     @Test
     public void testStartHourEqualsEndHour() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new Period(4, 4);  // Should throw IllegalArgumentException because startHour == endHour
         });
 
@@ -73,7 +72,7 @@ public void testStartHourNegative() {
     // test case 9
     @Test
     public  void testendHourNegative() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->  {
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () ->  {
             new Period(7,-8);   // Should throw IllegalArgumentException because of a negative input in endHour
         });
     }
@@ -82,14 +81,14 @@ public void testStartHourNegative() {
     @Test
     public void testValidStartandendHour() {
         Period p =  new Period(0, 24);
-        assertNotNull(p);
+        Assertions.assertNotNull(p);
 
     }
 
     // Test Case 11: Invalid startHour (startHour == 25)
     @Test
     public void testInvalidStartHourExceedsTwentyFour() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             Period period =  new Period(25, 6);  // Invalid startHour (greater than 24)
         });
 
@@ -98,7 +97,7 @@ public void testStartHourNegative() {
     // Test Case 12: Invalid endHour (endHour > 24)
     @Test
     public void testInvalidEndHourExceedsTwentyFour() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             Period period =    new Period(4, 25);  // Invalid endHour (greater than 24)
         });
 
@@ -108,13 +107,13 @@ public void testStartHourNegative() {
     @Test
     public void testValidPeriodTwentyThreeToTwentyFour() {
         Period period = new Period(23, 24);  // Valid case
-        assertNotNull(period);  // Ensure the object is created successfully
+        Assertions.assertNotNull(period);  // Ensure the object is created successfully
     }
 
     // Test Case 14: Invalid startHour (-1)
     @Test
     public void testInvalidNegativeStartHour() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             Period period =   new Period(-1, 22);  // Invalid startHour
         });
     }
@@ -122,7 +121,7 @@ public void testStartHourNegative() {
     // Test Case 15: Invalid startHour == 24
     @Test
     public void testInvalidStartHourEqualTwentyFour() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             Period period =  new Period(24, 5);  // Invalid startHour == 24
         });
 
@@ -131,7 +130,7 @@ public void testStartHourNegative() {
     // Test Case 16: Invalid period (startHour > endHour)
     @Test
     public void testInvalidStartGreaterThanEnd() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             Period period =  new Period(22, 20);  // Invalid period
         });
 
@@ -141,7 +140,7 @@ public void testStartHourNegative() {
     @Test
     public void testValidSmallDuration() {
         Period period = new Period(0, 1);  // Valid period
-        assertNotNull(period);  // Ensure the object is created successfully
+        Assertions.assertNotNull(period);  // Ensure the object is created successfully
     }
     
 
@@ -150,35 +149,35 @@ public void testStartHourNegative() {
     @Test
     public void testValidDuration() {
         Period period = new Period(4, 7);
-        assertEquals(3, period.duration());  // Duration = 7 - 4 = 3
+        Assertions.assertEquals(3, period.duration());  // Duration = 7 - 4 = 3
     }
 
     // Test Case 4: StartHour = 0 and endHour = 5
     @Test
     public void testStartHourZeroEndHourFive() {
         Period period = new Period(0, 5);
-        assertEquals(5, period.duration());  // Duration = 5 - 0 = 5
+        Assertions.assertEquals(5, period.duration());  // Duration = 5 - 0 = 5
     }
 
     // Test Case 5: Half-day (6 to 12)
     @Test
     public void testHalfDay() {
         Period period = new Period(6, 12);
-        assertEquals(6, period.duration());  // Duration = 12 - 6 = 6
+        Assertions.assertEquals(6, period.duration());  // Duration = 12 - 6 = 6
     }
 
     // Test Case 6: Full-day (0 to 24)
     @Test
     public void testFullDay() {
         Period period = new Period(0, 24);
-        assertEquals(24, period.duration());  // Duration = 24 - 0 = 24
+        Assertions.assertEquals(24, period.duration());  // Duration = 24 - 0 = 24
     }
 
     // Test Case 7: One-hour duration (4 to 5)
     @Test
     public void testOneHourDuration() {
         Period period = new Period(4, 5);
-        assertEquals(1, period.duration());  // Duration = 5 - 4 = 1
+        Assertions.assertEquals(1, period.duration());  // Duration = 5 - 4 = 1
     }
 
     //  TESTING THE OVERLAPS METHOD
@@ -187,7 +186,7 @@ public void testStartHourNegative() {
     public void testCompletelyOverlappingPeriods() {
         Period period1 = new Period(3, 6);
         Period period2 = new Period(4, 5);
-        assertTrue(period1.overlaps(period2));
+        Assertions.assertTrue(period1.overlaps(period2));
     }
 
     // Test Case 2: Periods partially overlap
@@ -195,7 +194,7 @@ public void testStartHourNegative() {
     public void testPartiallyOverlappingPeriods() {
         Period period1 = new Period(2, 5);
         Period period2 = new Period(4, 7);
-        assertTrue(period1.overlaps(period2));
+        Assertions.assertTrue(period1.overlaps(period2));
     }
 
     // Test Case 3: Periods are consecutive (no overlap)
@@ -203,7 +202,7 @@ public void testStartHourNegative() {
     public void testConsecutivePeriods() {
         Period period1 = new Period(3, 5);
         Period period2 = new Period(5, 7);
-        assertFalse(period1.overlaps(period2));
+        Assertions.assertFalse(period1.overlaps(period2));
     }
 
     // Test Case 4: Periods do not overlap at all
@@ -211,7 +210,7 @@ public void testStartHourNegative() {
     public void testNonOverlappingPeriods() {
         Period period1 = new Period(1, 3);
         Period period2 = new Period(4, 6);
-        assertFalse(period1.overlaps(period2));
+        Assertions.assertFalse(period1.overlaps(period2));
     }
 
     // Test Case 5: One period is fully within another
@@ -219,7 +218,7 @@ public void testStartHourNegative() {
     public void testFullyWithinAnotherPeriod() {
         Period period1 = new Period(2, 8);
         Period period2 = new Period(3, 5);
-        assertTrue(period1.overlaps(period2));
+        Assertions.assertTrue(period1.overlaps(period2));
     }
 
     // Test Case 6: Same start hour, different end hour
@@ -227,7 +226,7 @@ public void testStartHourNegative() {
     public void testSameStartDifferentEnd() {
         Period period1 = new Period(5, 9);
         Period period2 = new Period(5, 7);
-        assertTrue(period1.overlaps(period2));
+        Assertions.assertTrue(period1.overlaps(period2));
     }
 
     // Test Case 7: Periods are identical
@@ -235,7 +234,7 @@ public void testStartHourNegative() {
     public void testIdenticalPeriods() {
         Period period1 = new Period(3, 6);
         Period period2 = new Period(3, 6);
-        assertTrue(period1.overlaps(period2));
+        Assertions.assertTrue(period1.overlaps(period2));
     }
 
     // Test Case 8: Boundary overlap (touching exactly at one end)
@@ -243,7 +242,7 @@ public void testStartHourNegative() {
     public void testBoundaryOverlap() {
         Period period1 = new Period(3, 5);
         Period period2 = new Period(5, 7);
-        assertFalse(period1.overlaps(period2));
+        Assertions.assertFalse(period1.overlaps(period2));
     }
 
 
