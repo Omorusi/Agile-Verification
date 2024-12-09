@@ -10,6 +10,7 @@ public class Rate {
     private BigDecimal hourlyReducedRate;
     private ArrayList<Period> reduced = new ArrayList<>();
     private ArrayList<Period> normal = new ArrayList<>();
+    private RateCalculationStrategy strategy;
 
     public Rate(CarParkKind kind, ArrayList<Period> reducedPeriods, ArrayList<Period> normalPeriods, BigDecimal normalRate, BigDecimal reducedRate) {
         if (reducedPeriods == null || normalPeriods == null) {
@@ -40,6 +41,14 @@ public class Rate {
         this.hourlyReducedRate = reducedRate;
         this.reduced = reducedPeriods;
         this.normal = normalPeriods;
+
+        this.strategy = switch (this.kind) {
+            case VISITOR -> new VisitorStrategy();
+            case MANAGEMENT -> new ManagementStrategy();
+            case STUDENT -> new StudentStrategy();
+            case STAFF -> new StaffStrategy();
+            default -> throw new IllegalArgumentException("Unknown CarParkKind: " + kind);
+        };
     }
 
     /**
@@ -93,13 +102,8 @@ public class Rate {
         return isValid;
     }
     public BigDecimal calculate(Period periodStay) {
-        int normalRateHours = periodStay.occurences(normal);
-        int reducedRateHours = periodStay.occurences(reduced);
-        if (this.kind==CarParkKind.VISITOR) return BigDecimal.valueOf(0);
-        return (this.hourlyNormalRate.multiply(BigDecimal.valueOf(normalRateHours))).add(
-                this.hourlyReducedRate.multiply(BigDecimal.valueOf(reducedRateHours)));
+        return this.strategy.calculate(periodStay, hourlyNormalRate, hourlyReducedRate, normal, reduced);
     }
-
 
 }
 
