@@ -579,7 +579,7 @@ normalPeriods.add(new Period(7, 8));
         BigDecimal total = rate.calculate(new Period(6, 10));
 
         // After applying visitor logic: Free up to 10.00, 50% of (14.00 - 10.00) = 2.00
-
+        Assertions.assertEquals(new BigDecimal("2.00"), total);
     }
 
 }
