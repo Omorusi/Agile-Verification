@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Scenic Route</title>
+    <link rel="stylesheet" href="style.css" />
+
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Scenic Route</h1>
+        <p>Sign Up </p>
+        <input type="text" id="Name" placeholder="Enter Name">
+        <input type="text" id="Surname" placeholder="Enter Surname">
+        <input type="text" id="emailAddress" placeholder="Enter Email Address">
+        <input type="password" id="password1" placeholder="Enter Password">
+        <button onclick="signIn()">Sign In</button>
+        <button onclick="Cancel()">Cancel</button>
+        
+    </div>
+
+    <script>
+        function signIn() {
+            let name  = document.getElementById('Name').value;
+            let surname = document.getElementById('Surname').value;
+            let email = document.getElementById('emailAddress').value;
+            let password = document.getElementById('password').value;
+            if (username && password) {
+                alert("Login successful!"); 
+            } else {
+                alert("Please enter both username and password.");
+            }
+        }
+
+        function Cancel(){
+            window.location.href = "Welcome.html"
+        }
+    </script>
+</body>
+</html>
